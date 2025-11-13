@@ -1,0 +1,159 @@
+name: CI - Java Build
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+  workflow_dispatch:
+
+jobs:
+  build-gradle:
+    name: Build (Gradle)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x gradlew
+
+      - name: Run tests
+        run: ./gradlew clean test
+
+      - name: Generate coverage report
+        run: ./gradlew jacocoTestReport
+
+      - name: Run OWASP Dependency Check
+        uses: dependency-check/Dependency-Check_Action@main
+        env:
+          JAVA_HOME: /opt/jdk
+        with:
+          project: 'Fair Billing (Gradle)'
+          path: '.'
+          format: 'ALL'
+
+      - name: Build JAR
+        run: ./gradlew build
+
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradle-jar
+          path: build/libs/*.jar
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradle-coverage
+          path: build/reports/jacoco/test/html/
+
+      - name: Upload dependency check report
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradle-dependency-check
+          path: reports/
+
+  test-gradle:
+    name: Test JAR (Gradle) - JDK ${{ matrix.java-version }}
+    needs: build-gradle
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [8, 11, 16, 17, 21]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java-version }}
+
+      - name: Download JAR
+        uses: actions/download-artifact@v4
+        with:
+          name: gradle-jar
+          path: jars/
+
+      - name: Smoke test CLI
+        run: java -jar jars/*.jar test-data/example.log
+
+  build-maven:
+    name: Build (Maven)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+
+      - name: Run tests
+        run: mvn clean test
+
+      - name: Run OWASP Dependency Check
+        uses: dependency-check/Dependency-Check_Action@main
+        env:
+          JAVA_HOME: /opt/jdk
+        with:
+          project: 'Fair Billing (Maven)'
+          path: '.'
+          format: 'ALL'
+
+      - name: Build JAR
+        run: mvn clean package
+
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: maven-jar
+          path: target/*.jar
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: maven-coverage
+          path: target/site/jacoco/
+
+      - name: Upload dependency check report
+        uses: actions/upload-artifact@v4
+        with:
+          name: maven-dependency-check
+          path: reports/
+
+  test-maven:
+    name: Test JAR (Maven) - JDK ${{ matrix.java-version }}
+    needs: build-maven
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [8, 11, 16, 17, 21]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java-version }}
+
+      - name: Download JAR
+        uses: actions/download-artifact@v4
+        with:
+          name: maven-jar
+          path: jars/
+
+      - name: Smoke test CLI
+        run: java -jar jars/*.jar test-data/example.log
