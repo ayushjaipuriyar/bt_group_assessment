@@ -1,0 +1,117 @@
+=== BILLING TEST CASES - EXPECTED RESULTS ===
+
+--- BASIC TESTS (tests 1-10) ---
+Test 1: test1_basic.txt
+  ALICE99 4 240
+  CHARLIE 3 37
+
+Test 2: test2_only_ends.txt
+  ALICE 1 292
+  BOB 1 0
+  CHARLIE 1 607
+
+Test 3: test3_only_starts.txt
+  ALICE 1 3600
+  BOB 1 1800
+  CHARLIE 1 0
+
+Test 4: test4_with_invalid.txt
+  ALICE 1 930
+  BOB 1 1500
+  CHARLIE 2 900
+
+Test 5: test5_concurrent.txt
+  ALICE 3 1920
+
+Test 6: test6_boundaries.txt
+  MIKE 2 90
+  ZOE 3 180
+
+Test 7: test7_same_time.txt
+  ALICE 1 0
+  BOB 1 0
+  CHARLIE 1 0
+
+Test 8: test8_complex.txt
+  ALICE 2 1500
+  BOB 1 900
+  CHARLIE 2 2400
+  DAVID 1 300
+  EVE 1 4400
+
+Test 9: test9_single_user.txt
+  ZACK 4 2400
+
+Test 10: test10_extreme.txt
+  ALPHA 1 1
+  BRAVO 1 0
+  CHARLIE 1 1
+
+--- EDGE CASES (tests 11-30) ---
+Test 11: test11_multi_unmatched_starts.txt
+  ALICE 3 1800
+
+Test 12: test12_multi_unmatched_ends.txt
+  ALICE 3 1800
+
+Test 13: test13_single_pair.txt
+  ALICE 1 600
+
+Test 14: test14_unmatched_before_matched.txt
+  ALICE 2 600
+
+Test 15: test15_unmatched_after_matched.txt
+  ALICE 2 600
+
+Test 16: test16_alternating_unmatched.txt
+  ALICE 3 1200
+
+Test 17: test17_nested_sessions.txt
+  ALICE 3 2700
+
+Test 18: test18_keyword_usernames.txt
+  End 1 600
+  NORMAL 1 300
+  Start 1 600
+
+Test 19: test19_empty.txt
+  [no output]
+
+Test 20: test20_all_invalid.txt
+  [no output]
+
+Test 21: test21_single_start.txt
+  SOLO 1 0
+
+Test 22: test22_single_end.txt
+  SOLO 1 0
+
+Test 23: test23_same_timestamp.txt
+  ALICE 2 0
+  BOB 1 0
+  CHARLIE 1 0
+
+Test 24: test24_full_day.txt
+  ALICE 1 86399
+
+Test 25: test25_multi_user_boundary.txt
+  ZOE 2 57598
+  MIKE 1 2
+  CHARLIE 1 1
+
+Test 26: test26_high_concurrency.txt
+  ALICE 4 16
+
+Test 27: test27_boundary_precision.txt
+  ALPHA 1 1
+  BOB 1 1
+
+Test 28: test28_max_duration.txt
+  ZZZ 1 86399
+
+Test 29: test29_tab_separated.txt
+  USER1 1 600
+  USER2 1 600
+
+Test 30: test30_long_username.txt
+  USER123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ 1 600
