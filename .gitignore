@@ -5,3 +5,47 @@
 
 # OS specific
 Thumbs.db
+
+# Build outputs
+/build/
+/target/
+/out/
+
+# Gradle
+/.gradle/
+
+# Maven wrapper and local files
+.mvn/
+
+# IntelliJ/Eclipse files
+*.iml
+.classpath
+.project
+.settings/
+
+# Logs and reports
+/logs/
+*.log
+/test-results/
+/build/reports/
+/target/surefire-reports/
+jacoco.exec
+
+# Generated files
+/generated/
+/generated-sources/
+/generated-test-sources/
+
+# Temporary files
+tmp/
+*.tmp
+*~
+*.swp
+
+# Java compiled
+**/*.class
+
+# Ignore packaged archives in build directories
+/**/build/libs/
+/**/build/*.jar
+
