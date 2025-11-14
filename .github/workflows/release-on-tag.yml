@@ -10,6 +10,8 @@ jobs:
   build-and-release:
     name: Build, test, collect artifacts and create release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@v4
@@ -37,28 +39,15 @@ jobs:
       - name: Package maven coverage HTML
         run: zip -r maven-coverage-html.zip target/site/jacoco || true
 
+      - name: Package Gradle JAR artifacts
+        run: zip -r gradle-artifacts.zip build/libs/ || true
+
       - name: Create GitHub Release
-        run: |
-          # Create release using GitHub CLI
-          gh release create ${{ github.ref_name }} \
-            --title "Release ${{ github.ref_name }}" \
-            --generate-notes
-
-      - name: Upload Gradle JAR to release
-        run: |
-          # Upload Gradle artifacts
-          zip -r gradle-artifacts.zip build/libs/ || true
-          gh release upload ${{ github.ref_name }} gradle-artifacts.zip
-
-      - name: Upload Gradle coverage HTML to release
-        run: |
-          gh release upload ${{ github.ref_name }} gradle-coverage-html.zip
-
-      - name: Upload Maven JAR to release
-        run: |
-          # Upload Maven artifacts
-          gh release upload ${{ github.ref_name }} target/*.jar
-
-      - name: Upload Maven coverage HTML to release
-        run: |
-          gh release upload ${{ github.ref_name }} maven-coverage-html.zip
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            gradle-artifacts.zip
+            gradle-coverage-html.zip
+            target/*.jar
+            maven-coverage-html.zip
