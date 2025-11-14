@@ -1,6 +1,10 @@
 # Fair Billing System: Java Implementation
 
-[![CI](https://github.com/ayushjaipuriyar/bt_group_test/actions/workflows/ci.yml/badge.svg)](https://github.com/ayushjaipuriyar/bt_group_test/actions/workflows/ci.yml)
+[![CI](https://github.com/ayushjaipuriyar/bt_group_assessment/actions/workflows/ci.yml/badge.svg)](https://github.com/ayushjaipuriyar/bt_group_assessment/actions/workflows/ci.yml)
+
+<!-- Badges: CI status, Codecov, Latest Release -->
+[![Codecov](https://codecov.io/gh/ayushjaipuriyar/bt_group_assessment/branch/main/graph/badge.svg?token=)](https://codecov.io/gh/ayushjaipuriyar/bt_group_assessment)
+[![Release](https://img.shields.io/github/v/release/ayushjaipuriyar/bt_group_assessment.svg)](https://github.com/ayushjaipuriyar/bt_group_assessment/releases/latest)
 
 ## Problem Description
 

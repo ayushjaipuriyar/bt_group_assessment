@@ -1,0 +1,89 @@
+name: Release on Tag
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-and-release:
+    name: Build, test, collect artifacts and create release
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x gradlew
+
+      - name: Build (Gradle) and run tests
+        run: |
+          ./gradlew clean test jacocoTestReport build
+
+      - name: Package coverage HTML
+        run: zip -r gradle-coverage-html.zip build/reports/jacoco/test/html || true
+
+      - name: Build Maven package and tests
+        run: |
+          mvn -B clean test package || true
+
+      - name: Package maven coverage HTML
+        run: zip -r maven-coverage-html.zip target/site/jacoco || true
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Gradle JAR to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: build/libs/
+          asset_name: gradle-artifacts.zip
+          asset_content_type: application/zip
+
+      - name: Upload Gradle coverage HTML to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: gradle-coverage-html.zip
+          asset_name: gradle-coverage-html.zip
+          asset_content_type: application/zip
+
+      - name: Upload Maven JAR to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: target/*.jar
+          asset_name: maven-artifact.jar
+          asset_content_type: application/java-archive
+
+      - name: Upload Maven coverage HTML to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: maven-coverage-html.zip
+          asset_name: maven-coverage-html.zip
+          asset_content_type: application/zip
