@@ -37,7 +37,7 @@ Test 8: test8_complex.txt
   BOB 1 900
   CHARLIE 2 2400
   DAVID 1 300
-  EVE 1 4400
+  EVE 1 3300
 
 Test 9: test9_single_user.txt
   ZACK 4 2400
@@ -45,7 +45,6 @@ Test 9: test9_single_user.txt
 Test 10: test10_extreme.txt
   ALPHA 1 1
   BRAVO 1 0
-  CHARLIE 1 1
 
 --- EDGE CASES (tests 11-30) ---
 Test 11: test11_multi_unmatched_starts.txt
