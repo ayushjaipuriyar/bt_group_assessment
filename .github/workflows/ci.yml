@@ -45,6 +45,8 @@ jobs:
           project: 'Fair Billing (Gradle)'
           path: '.'
           format: 'ALL'
+          args: >
+            --exclude '**/*.zip'
 
       - name: Build JAR
         run: ./gradlew build
@@ -123,6 +125,8 @@ jobs:
           project: 'Fair Billing (Maven)'
           path: '.'
           format: 'ALL'
+          args: >
+            --exclude '**/*.zip'
 
       - name: Build JAR
         run: mvn clean package
