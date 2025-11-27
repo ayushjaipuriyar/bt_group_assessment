@@ -32,7 +32,7 @@ jobs:
         run: ./gradlew jacocoTestReport
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           files: build/jacoco/test.exec
           fail_ci_if_error: true
@@ -112,7 +112,7 @@ jobs:
         run: mvn clean test
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           files: target/jacoco.exec
           fail_ci_if_error: true
