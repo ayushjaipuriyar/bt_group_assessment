@@ -49,3 +49,6 @@ tmp/
 /**/build/libs/
 /**/build/*.jar
 
+# Submission archives
+*.zip
+
