@@ -86,7 +86,7 @@ jobs:
           java-version: ${{ matrix.java-version }}
 
       - name: Download JAR
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: gradle-jar
           path: jars/
@@ -166,7 +166,7 @@ jobs:
           java-version: ${{ matrix.java-version }}
 
       - name: Download JAR
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: maven-jar
           path: jars/
